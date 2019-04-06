@@ -1,4 +1,4 @@
-function [points P1 P2] = reconstruct_3d(name)
+function [points, P1, P2] = reconstruct_3d(name)
 % Homework 2: 3D reconstruction from two Views
 % This function takes as input the name of the image pairs (i.e. 'house' or
 % 'library') and returns the 3D points as well as the camera matrices...but
@@ -14,6 +14,8 @@ function [points P1 P2] = reconstruct_3d(name)
 % (3) Keep the names of the missing functions as they are defined here,
 % otherwise things will crash
 
+close all;
+clc;
 
 %% ------- Load images, K matrices and matches ----------------------------
 data_dir = ['../data/' name];
@@ -47,7 +49,7 @@ end
 % F        : the 3x3 fundamental matrix,
 % res_err  : mean squared distance between points in the two images and their
 % their corresponding epipolar lines
-[F res_err] = fundamental_matrix(); % <------------------------------------- You write this one!
+[F, res_err] = fundamental_matrix(matches); % <------------------------------------- You write this one!
 
 fprintf('Residual in F = %f',res_err);
 
@@ -58,7 +60,7 @@ E = K2'*F*K1; % the essential matrix
 
 % R : cell array with the possible rotation matrices of second camera
 % t : cell array of the possible translation vectors of second camera
-[R t] = find_rotation_translation();% <------------------------------------- You write this one!
+[R, t] = find_rotation_translation(E);% <------------------------------------- You write this one!
 
 
 % Find R2 and t2 from R,t such that largest number of points lie in front
@@ -79,7 +81,7 @@ for ti = 1:length(t)
         
         P2 = K2*[R2 t2];
         
-        [points_3d errs(ti,ri)] = find_3d_points(); %<---------------------- You write this one!
+        [points_3d, errs(ti,ri)] = find_3d_points(matches, P1, P2); %<---------------------- You write this one!
         
         Z1 = points_3d(:,3);
         Z2 = R2(3,:)*points_3d'+t2(3);Z2 = Z2';
@@ -99,12 +101,12 @@ t2 = t{ti(j)}; R2 = R{ri(j)};
 P2 = K2*[R2 t2];
 
 % compute the 3D points with the final P2
-points = find_3d_points(); % <---------------------------------------------- You have already written this one!
+points = find_3d_points(matches, P1, P2); % <---------------------------------------------- You have already written this one!
 
 %% -------- plot points and centers of cameras ----------------------------
 
 
-plot_3d(); % <-------------------------------------------------------------- You write this one!
+plot_3d(points , R2 , t2); % <-------------------------------------------------------------- You write this one!
 
 
 

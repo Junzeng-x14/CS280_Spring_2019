@@ -1,0 +1,1 @@
+[points, P1, P2] = reconstruct_3d('house');
