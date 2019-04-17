@@ -14,20 +14,19 @@ for k = 1:N
 		 y1*P1(3,1)-P1(2,1), y1*P1(3,2)-P1(2,2), y1*P1(3,3)-P1(2,3);...
 		 x2*P2(3,1)-P2(1,1), x2*P2(3,2)-P2(1,2), x2*P2(3,3)-P2(1,3);...
 		 y2*P2(3,1)-P2(2,1), y2*P2(3,2)-P2(2,2), y2*P2(3,3)-P2(2,3)];
-	 b = [x1*P1(3,4)-P1(1,4);y1*P1(3,4)-P1(2,4);x2*P2(3,4)-P2(1,4);y2*P2(3,4)-P2(2,4)];
-	 X = A\(-b);
-	 points_3d(k,:) = X;
+	b = [x1*P1(3,4)-P1(1,4);y1*P1(3,4)-P1(2,4);x2*P2(3,4)-P2(1,4);y2*P2(3,4)-P2(2,4)];
+	X = A\(-b);	
+	points_3d(k,:) = X;
 end
 proj1 = P1*[ points_3d, ones(N,1)]';
-proj1 = proj1./proj1(3,:);
-proj1 = proj1';
+proj1 = (proj1./proj1(3,:))';
 
 proj2 = P2*[ points_3d, ones(N,1)]';
-proj2 = proj2./proj2(3,:);
-proj2 = proj2';
+proj2 = (proj2./proj2(3,:))';
 
 dist1 = sqrt((X1(:,1)-proj1(:,1)).^2+(X1(:,2)-proj1(:,2)).^2);
-dist2 = sqrt((X1(:,1)-proj2(:,1)).^2+(X1(:,2)-proj2(:,2)).^2);
+dist2 = sqrt((X2(:,1)-proj2(:,1)).^2+(X2(:,2)-proj2(:,2)).^2);
 
-errs = mean([dist1;dist2]);
+dist = [dist1;dist2];
+errs = mean(dist);
 end

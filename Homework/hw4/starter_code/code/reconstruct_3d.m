@@ -50,8 +50,9 @@ end
 % res_err  : mean squared distance between points in the two images and their
 % their corresponding epipolar lines
 [F, res_err] = fundamental_matrix(matches); % <------------------------------------- You write this one!
-
-fprintf('Residual in F = %f',res_err);
+F 
+res_err
+% fprintf('Residual in F = %f',res_err);
 
 E = K2'*F*K1; % the essential matrix
 
@@ -92,7 +93,8 @@ for ti = 1:length(t)
 end
 
 [ti ri] = find(num_points == max(max(num_points)));
-
+ti
+ri
 j = 1; % pick one out the best combinations
 
 fprintf('Reconstruction error = %f',errs(ti(j),ri(j)));

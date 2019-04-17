@@ -34,12 +34,12 @@ F=U2*S2*V2';
 F = T2'*F*T1;
 
 % residual computation
-den = sqrt(sum((F'*X2).^2,1))';
-d12 = abs(diag(X1'*F*X2))./den;
-clear den;
+iden = sqrt(sum((F'*X2).^2,1))';
+d12 = abs(diag(X1'*F'*X2))./iden;
+clear iden;
 
-den = sqrt(sum((F'*X1).^2,1))';
-d21 = abs(diag(X2'*F*X1))./den;
+iden = sqrt(sum((F'*X1).^2,1))';
+d21 = abs(diag(X2'*F*X1))./iden;
 
 res_err = sum(d12.^2+d21.^2)/(2*N);
 end
